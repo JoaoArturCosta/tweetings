@@ -1,4 +1,4 @@
-import { privateProcedure } from "./../trpc";
+import { filterUserForClient } from "./../../helpers/filterUserForClient";
 import clerkClient from "@clerk/clerk-sdk-node";
 import { z } from "zod";
 
@@ -19,6 +19,6 @@ export const profileRouter = createTRPCRouter({
           message: "User not found",
         });
       }
-      return user;
+      return filterUserForClient(user);
     }),
 });

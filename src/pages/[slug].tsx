@@ -1,8 +1,5 @@
 import { type GetStaticProps, type NextPage } from "next";
 import Head from "next/head";
-
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { api } from "~/utils/api";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
@@ -10,8 +7,6 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import superjson from "superjson";
 import { PageLayout } from "~/components/layout";
 import Image from "next/image";
-
-dayjs.extend(relativeTime);
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data, isLoading } = api.profile.getUserByUsername.useQuery({
@@ -29,16 +24,18 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Head>
 
       <PageLayout>
-        <div className=" relative h-48 border-b border-slate-400 bg-slate-600">
+        <div className=" relative h-36  bg-slate-600">
           <Image
             src={data.profilePicture}
             alt={`${data.username ?? ""}'s profile pic`}
-            width={64}
-            height={64}
-            className="absolute bottom-0 left-0 -mb-8 ml-4"
+            width={128}
+            height={128}
+            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black bg-black"
           />
-          <div>{data.username}</div>
         </div>
+        <div className="h-[64px]"></div>
+        <div className="p-6 text-2xl">{`@${data.username ?? ""}`}</div>
+        <div className="w-full border-b border-slate-400"></div>
       </PageLayout>
     </>
   );
@@ -56,6 +53,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof slug !== "string") throw new Error("no slug");
 
   const username = slug.replace("@", "");
+
   console.log(username);
 
   await ssg.profile.getUserByUsername.prefetch({ username });
@@ -69,7 +67,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths = () => {
-  return { paths: [""], fallback: "blocking" };
+  return { paths: [], fallback: "blocking" };
 };
 
 export default ProfilePage;
