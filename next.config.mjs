@@ -8,7 +8,7 @@
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["images.clerk.dev"],
+    domains: ["images.clerk.dev", "altcoinsbox.com"],
   },
 
   /**
@@ -30,4 +30,5 @@ const config = {
   },
   swcMinify: true,
 };
+
 export default config;

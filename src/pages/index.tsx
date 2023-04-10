@@ -1,4 +1,4 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 
 import { api } from "~/utils/api";
@@ -36,7 +36,7 @@ const CreatePostWizard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-3 p-8">
       <Image
         src={user.profileImageUrl}
         alt="Profile Image"
@@ -61,7 +61,12 @@ const CreatePostWizard = () => {
         disabled={isPosting}
       />
       {input !== "" && !isPosting && (
-        <button onClick={() => mutate({ content: input })}>Post</button>
+        <button
+          onClick={() => mutate({ content: input })}
+          className="rounded-full bg-blue-500 px-6 font-bold text-white hover:bg-blue-700"
+        >
+          Post
+        </button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">
@@ -94,10 +99,10 @@ const Feed = () => {
 };
 
 const Home: NextPage = () => {
-  const { user, isLoaded: usersLoaded, isSignedIn } = useUser();
+  const { isLoaded: usersLoaded, isSignedIn } = useUser();
 
   // Start fetching asap
-  const { data } = api.posts.getAll.useQuery();
+  api.posts.getAll.useQuery();
 
   //Return empty div if user isn't loaded
   if (!usersLoaded) return <div />;
@@ -106,12 +111,12 @@ const Home: NextPage = () => {
     <>
       <PageLayout>
         <div className="border-b border-slate-400 p-4">
-          {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
+          <div className="  text-4xl font-bold ">Home</div>
+          {isSignedIn ? (
+            <CreatePostWizard />
+          ) : (
+            <div className="p-4 text-xl"> Hi , Sign In to Start Posting ! </div>
           )}
-          {isSignedIn && <CreatePostWizard />}
         </div>
         <Feed />
       </PageLayout>

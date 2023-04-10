@@ -6,6 +6,7 @@ import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 import Head from "next/head";
+import SideBar from "~/components/sideBar";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -16,6 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Toaster position="bottom-center" />
+      <SideBar />
       <Component {...pageProps} />
     </ClerkProvider>
   );
